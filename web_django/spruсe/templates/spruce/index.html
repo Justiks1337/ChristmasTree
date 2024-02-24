@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Новогодняя ёлка</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css'%}" type="text/css">
+</head>
+<body>
+    <header>
+        {% load static %}
+        <div class="header-text"><img src="{% static '1c.png' %}" style="height: 30px; width: 60px"></div>
+        <div class="header-text" id="exp">🎉 {{exp}}</div>
+    </header>
+
+    <div id="spruce" style="background: url({% static 'spruce.png' %}) no-repeat">
+        <div id="toy_1" class="toy" style="position: relative; top: 15vw; left: 45%;"><div class="toy-item">+</div></div>
+        <div id="toy_2" class="toy" style="position: relative; top: 20vw; left: 35%;"><div class="toy-item">+</div></div>
+        <div id="toy_3" class="toy" style="position: relative; top: 17vw; left: 55%;"><div class="toy-item">+</div></div>
+        <div id="toy_4" class="toy" style="position: relative; top: 20vw; left: 27%;"><div class="toy-item">+</div></div>
+        <div id="toy_5" class="toy" style="position: relative; top: 15vw; left: 45%"><div class="toy-item">+</div></div>
+        <div id="toy_6" class="toy" style="position: relative; top: 10vw; left: 63%;"><div class="toy-item">+</div></div>
+        <div id="toy_7" class="toy" style="position: relative; top: 3vw; left: 25%;"><div class="toy-item">+</div></div>
+        <div id="toy_8" class="toy" style="position: relative; left: 45%;"><div class="toy-item">+</div></div>
+        <div id="toy_9" class="toy" style="position: relative; left: 65%;"><div class="toy-item">+</div></div>
+        <div id="toy_10" class="toy" style="position: relative; bottom: 10vw; left: 25%;"><div class="toy-item">+</div></div>
+    </div>
+
+    <footer>
+        <div id="happy">HAPPY NEW YEAR 🎉 </div>
+        <div id="dubkov">Сделал Максим Дубков для 1С ❤️</div>
+    </footer>
+
+    <div id="info" style="display: none">{{user_id}}</div>
+
+    <div id="buy_toys" style="visibility: hidden">
+
+        <div id="close_x">✖️</div>
+
+        <div class="toy_var" id="toy_var_1">
+            <img src="{% static '1.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Красный обыч.</li>
+                <li>100</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_2">
+            <img src="{% static '2.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Изумрудный</li>
+                <li>200</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_3">
+            <img src="{% static '3.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Красный + звезды</li>
+                <li>300</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_4">
+            <img src="{% static '4.png' %}" class="toy_img">
+             <ul style="display: inline-block">
+                <li>Белоснежный</li>
+                <li>400</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_5">
+            <img src="{% static '5.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Красная снежинка</li>
+                <li>500</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_6">
+            <img src="{% static '6.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Золотой</li>
+                <li>600</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_7">
+            <img src="{% static '7.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Грязно рубиновый</li>
+                <li>700</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_8">
+            <img src="{% static '8.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Чистый рубин</li>
+                <li>800</li>
+            </ul>
+        </div>
+        <div class="toy_var" id="toy_var_9">
+            <img src="{% static '9.png' %}" class="toy_img">
+            <ul style="display: inline-block">
+                <li>Аметистовый</li>
+                <li>900</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div id="message" class="modal" style="visibility: hidden;">
+        <div>ОК</div>
+    </div>
+
+    <div id="buy_modal" class="modal" style="visibility: hidden;">
+        <div class="ok_button" id="buy">
+            ДА
+        </div>
+        <div class="cancel_button" id="cancel">
+            ОТМЕНА
+        </div>
+    </div>
+
+
+</body>
+
+{% load static %}
+<script>
+    var toys = new Map();
+    toys.set('toy_1', "{% static '1.png' %}");
+    toys.set('toy_2', "{% static '2.png' %}");
+    toys.set('toy_3', "{% static '3.png' %}");
+    toys.set('toy_4', "{% static '4.png' %}");
+    toys.set('toy_5', "{% static '5.png' %}");
+    toys.set('toy_6', "{% static '6.png' %}");
+    toys.set('toy_7', "{% static '7.png' %}");
+    toys.set('toy_8', "{% static '8.png' %}");
+    toys.set('toy_9', "{% static '9.png' %}");
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script type="text/javascript" src="{% static 'main.js'%}"></script>
+</html>

@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+
+html{
+    height: 100% !important;
+    width: 100% !important;
+    font-family: Montserrat !important;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    min-width: 100vw;
+    margin: 0;
+    background: #353535;
+}
+
+header {
+    max-height: 10%;
+    height: 10%;
+    min-width: 100%;
+    width: 100%;
+    background-color: #353535;
+}
+
+.header-text {
+    font-size: 30px;
+    color: gray;
+    font-weight: bold;
+    padding: 10px;
+    display:inline-block;
+    color: orange;
+}
+
+#spruce {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    background-position: center top !important;
+    background-size: cover !important;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    background: #353535;
+    min-height: 10%;
+    padding: 5%;
+    font-weight: bold;
+}
+
+#happy {
+    font-size: 250%;
+    color: orange;
+}
+
+#dubkov{
+    font-size: 15px;
+    padding-top: 10px;
+}
+
+.toy {
+    width: 11vw;
+    height: 11vw;
+    background-color: #353535;
+    font-size: 16vw;
+    color: gray;
+    border-radius: 10px;
+    border-width: 5px;
+    border-color: #3C3C3C
+}
+
+.toy_slot_img {
+    width: 80%;
+    height: 80%;
+}
+
+.toy-item {
+    top: 45%;
+    transform: translate(0, -50%);
+    left: 10%;
+    position: relative;
+}
+
+.toy:hover {
+    background: #FFAE55;
+}
+
+.toy_img{
+    width: 15vh;
+    height: 15vh;
+    display: inline-block;
+}
+
+
+#buy_toys {
+    position: fixed;
+    overflow: auto;
+    background: #353535;
+    width: 100vw;
+    height: 100vh;
+}
+
+.toy_var{
+   margin-top: 5px;
+   border: 3px solid black;
+   border-radius: 10px;
+}
+
+ul {
+    display: inline-block;
+    transform: translate(0, -100%);
+}
+
+li {
+    font-size: 5vw}
+
+#close_x: hover {
+    background-color: red;
+}
+
+#close_x {
+     font-size: 4vh;
+}
+
