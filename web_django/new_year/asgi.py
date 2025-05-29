@@ -11,8 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-from database.Connection import connect
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'new_year.settings')
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_django.new_year.settings')
-
-#application = get_asgi_application()
+application = get_asgi_application()

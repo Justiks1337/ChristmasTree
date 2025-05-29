@@ -1,4 +1,4 @@
-from config.Config import Config
+from telegram_bot.config.Config import Config
 from aiohttp import ClientSession
 from os import system
 from datetime import datetime

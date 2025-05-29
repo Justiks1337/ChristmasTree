@@ -1,0 +1,43 @@
+# docker-compose.yml
+version: '3'
+
+services:
+
+    database:
+        build:
+            context: .
+            dockerfile: ./dockerfiles/database/Dockerfile
+        environment:
+            POSTGRES_DB: "database"
+            POSTGRES_USER: "user"
+            POSTGRES_PASSWORD: "12345678"
+        expose:
+            - 5432
+
+    daphne:
+        build:
+            context: .
+            dockerfile: ./dockerfiles/web/Dockerfile
+        tty: true
+        command: python3 -u -m daphne new_year.asgi:application -b daphne -p 8000
+        depends_on:
+            - database
+        restart: always
+        ports:
+           - "8000:8000"
+
+
+    telegram:
+        build:
+            context: .
+            dockerfile: ./dockerfiles/telegram/Dockerfile
+        command: python3 -u telegram/main.py
+        depends_on:
+            - database
+        tty: true
+        environment:
+            - PYTHONPATH=.
+
+networks:
+    database_network:
+        driver: bridge

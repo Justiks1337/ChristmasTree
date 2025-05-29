@@ -71,7 +71,7 @@ TEMPLATES = [
 ]
 
 #WSGI_APPLICATION = 'web_django.new_year.wsgi.application'
-#ASGI_APPLICATION = 'web_django.new_year.asgi.application'
+ASGI_APPLICATION = 'web_django.new_year.asgi.application'
 
 
 # Database

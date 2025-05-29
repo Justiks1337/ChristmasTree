@@ -1,7 +1,7 @@
 import sqlite3
 import aiosqlite
 from asyncio import get_event_loop
-from config.Config import Config
+from telegram_bot.config.Config import Config
 from database.backup_tools import backup
 from database.database_log.log import log
 import os
