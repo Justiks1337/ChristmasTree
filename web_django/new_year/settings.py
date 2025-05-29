@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wfgen&1yexm9a3i29wmzvtf%(k1dp0tk+&n#m+9x07)wug$-s)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'spruce_backend', 'new_year.chess-kb.ru']
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'adrf'
+    'adrf',
 ]
 
 MIDDLEWARE = [
@@ -70,8 +70,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'web_django.new_year.wsgi.application'
-ASGI_APPLICATION = 'web_django.new_year.asgi.application'
+#WSGI_APPLICATION = 'web_django.new_year.wsgi.application'
+#ASGI_APPLICATION = 'web_django.new_year.asgi.application'
 
 
 # Database
@@ -123,9 +123,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-
 ]
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

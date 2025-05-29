@@ -15,4 +15,4 @@ from database.Connection import connect
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_django.new_year.settings')
 
-application = get_asgi_application()
+#application = get_asgi_application()
