@@ -18,7 +18,7 @@ function buy_combobox(toy){
             toy_type_id = buy_var.getElementsByClassName('toy_img')[0].src.charAt(buy_var.getElementsByClassName('toy_img')[0].src.length - 5);
             user_id = parseInt(document.getElementById('info').innerHTML);
 
-            $.post(`http://127.0.0.1:8080/api/v1/buy_toy/?user_id=${user_id}&slot=${toy_slot_id}&toy=${toy_type_id}`, {user_id: {user_id}, slot: {toy_slot_id}, toy_id: {toy_type_id}},
+            $.post(`http://127.0.0.1:80/api/v1/buy_toy/?user_id=${user_id}&slot=${toy_slot_id}&toy=${toy_type_id}`, {user_id: {user_id}, slot: {toy_slot_id}, toy_id: {toy_type_id}},
                 function(data){
                     parse_data = JSON.parse(data);
                     buy_toys.style.visibility = "hidden";
@@ -39,7 +39,7 @@ function set_toys(){
     let user_id = parseInt(document.getElementById('info').innerHTML);
 
     $.ajax({
-        url: "http://127.0.0.1:8080/api/v1/get_user_toys/?user_id=" + user_id,
+        url: "http://127.0.0.1:80/api/v1/get_user_toys/?user_id=" + user_id,
         success: function (data) {
             let items = JSON.parse(data).items;
             console.log(items);

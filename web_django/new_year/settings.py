@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-wfgen&1yexm9a3i29wmzvtf%(k1dp0tk+&n#m+9x07)wug$-s)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'spruce_backend', 'new_year.chess-kb.ru']
+ALLOWED_HOSTS = ['127.0.0.1', 'daphne', 'new_year.chess-kb.ru']
 
 
 # Application definition
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'new_year.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['web_django/spruсe/templates/'],
+        'DIRS': ['spruсe/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

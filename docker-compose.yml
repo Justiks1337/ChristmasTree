@@ -3,6 +3,15 @@ version: '3'
 
 services:
 
+    nginx:
+        build:
+            context: .
+            dockerfile: ./dockerfiles/nginx/Dockerfile
+        depends_on:
+            - daphne
+        ports:
+            - "80:80"
+
     database:
         build:
             context: .
@@ -23,8 +32,8 @@ services:
         depends_on:
             - database
         restart: always
-        ports:
-           - "8000:8000"
+        expose:
+           - 8000
 
 
     telegram:

@@ -1,5 +1,6 @@
 import uuid
 
+from asgiref.sync import sync_to_async
 from adrf import decorators
 from rest_framework.renderers import JSONRenderer
 from rest_framework.request import Request
@@ -15,7 +16,7 @@ async def buy_toy(request: Request):
     toy_id = request.query_params.get('toy')
 
     toy_data = await api.models.ToyTypes.objects.aget(id=toy_id)
-    user_data = await api.models.User.objects.aget(id=user_id)
+    user_data = await api.models.User.objects.aget(user_id=user_id)
 
     if user_data.exp - toy_data.exp < 0:
         return Response(JSONRenderer().render({"success": False, "message": "Недостаточно новогоднего настроения! Общайся в чате что бы получить больше!"}))
@@ -32,12 +33,13 @@ async def buy_toy(request: Request):
     return Response(JSONRenderer().render({"success": True, 'message': "Игрушка успешно куплена!", "exp": user_data.exp - toy_data.exp}))
 
 
+@sync_to_async
 @decorators.api_view(['GET'])
-async def get_user_toys(request: Request):
+def get_user_toys(request: Request):
 
     user_id = request.query_params.get('user_id')
     queryset = api.models.Toys.objects.filter(owner=user_id)
-    return Response(JSONRenderer().render({'items': list(queryset)}))
+    return Response(JSONRenderer().render({'items': [[i.id, i.owner.user_id, i.toy.id, i.slot] for i in queryset]}))
 
 
 @decorators.api_view(['PUT'])
@@ -76,7 +78,7 @@ async def update_exp(request: Request):
     exp = request.data.get('exp')
     user_id = request.data.get('user_id')
 
-    user_data = await api.models.User.objects.aget(id=user_id)
+    user_data = await api.models.User.objects.aget(user_id=user_id)
     user_data.exp = user_data.exp + exp
     await user_data.asave()
 

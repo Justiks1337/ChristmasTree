@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 import aiogram
 from aiogram.filters import Command
@@ -10,15 +11,15 @@ from config.Config import Config
 bot = aiogram.Bot(Config.bot_token)
 dispatcher = aiogram.Dispatcher()
 
-HOST = "127.0.0.1"
+HOST = "daphne:8000"
 PROTOCOL = "http://"
 
 
-@dispatcher.message(Command("ёлка"))
+@dispatcher.message(Command("start"))
 async def christmas_tree_command_handler(message: aiogram.types.Message):
     user = message.from_user
     uuid_ = await database_manipulation(user)
-    url = f"{PROTOCOL}{HOST}/?user_id={user.id}&uuid={uuid_}"
+    url = f"{PROTOCOL}127.0.0.1/?user_id={user.id}&uuid={uuid_}"
     # url = "https://google.com/"
 
     web_app = aiogram.types.WebAppInfo(url=url)
@@ -46,14 +47,14 @@ async def database_manipulation(user: aiogram.types.User):
 
     async with ClientSession() as session:
         async with session.post(f"{PROTOCOL}{HOST}/api/v1/on_start_command/", json=payload) as response:
-            result = await response.json()
+            result = json.loads(await response.json())
             return result["uuid"]
 
 
 @dispatcher.message()
 async def main_handler(message: aiogram.types.Message):
     chat_id = message.chat.id
-    if chat_id in [-1001720982250, -1001530910994]:
+    if chat_id in [-1001720982250, -1001530910994, 2121622736]:
         points = round(len(message.text) / 10)
 
         payload = {
@@ -62,7 +63,7 @@ async def main_handler(message: aiogram.types.Message):
         }
 
         async with ClientSession() as session:
-            async with session.put(f"{PROTOCOL}{HOST}/api/v1/update_ext/", json=payload):
+            async with session.put(f"{PROTOCOL}{HOST}/api/v1/update_exp/", json=payload):
                 pass
 
 
