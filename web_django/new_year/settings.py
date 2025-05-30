@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'adrf',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'web_django.new_year.urls'
+ROOT_URLCONF = 'new_year.urls'
 
 TEMPLATES = [
     {
@@ -71,16 +72,20 @@ TEMPLATES = [
 ]
 
 #WSGI_APPLICATION = 'web_django.new_year.wsgi.application'
-ASGI_APPLICATION = 'web_django.new_year.asgi.application'
+ASGI_APPLICATION = 'new_year.asgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+            "NAME": "database",
+            "USER": "user",
+            "PASSWORD": "12345678",
+            "HOST": "database",
+            "PORT": "5432"
     }
 }
 

@@ -6,3 +6,5 @@ RUN python3 -m pip install --no-cache-dir --no-warn-script-location --upgrade pi
 && python3 -m pip install --no-cache-dir --no-warn-script-location --user -r requirements.txt
 
 COPY web_django/ .
+
+RUN python3 manage.py makemigrations

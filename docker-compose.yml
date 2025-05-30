@@ -19,7 +19,7 @@ services:
             context: .
             dockerfile: ./dockerfiles/web/Dockerfile
         tty: true
-        command: python3 -u -m daphne new_year.asgi:application -b daphne -p 8000
+        command: sh -c "python3 manage.py migrate && python3 -u -m daphne new_year.asgi:application -b daphne -p 8000"
         depends_on:
             - database
         restart: always

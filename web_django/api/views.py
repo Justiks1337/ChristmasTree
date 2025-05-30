@@ -1,15 +1,11 @@
+import uuid
+
 from adrf import decorators
-from rest_framework.response import Response
-from rest_framework.request import Request
 from rest_framework.renderers import JSONRenderer
-from django.shortcuts import render
+from rest_framework.request import Request
+from rest_framework.response import Response
 
-from database.Connection import connect
-
-
-@decorators.api_view(['GET'])
-async def get_toys(request: Request):
-    return Response(JSONRenderer().render({"items": await (await connect.request("SELECT * FROM toy_types")).fetchall()}))
+import api.models
 
 
 @decorators.api_view(['POST'])
@@ -18,26 +14,83 @@ async def buy_toy(request: Request):
     slot = request.query_params.get('slot')
     toy_id = request.query_params.get('toy')
 
-    toy_data = await (await connect.request("SELECT * FROM toy_types WHERE id = ?", (toy_id, ))).fetchone()
-    user_data = await (await connect.request("SELECT * FROM users WHERE user_id = ?", (user_id, ))).fetchone()
+    toy_data = await api.models.ToyTypes.objects.aget(id=toy_id)
+    user_data = await api.models.User.objects.aget(id=user_id)
 
-    if user_data[2] - toy_data[2] < 0:
+    if user_data.exp - toy_data.exp < 0:
         return Response(JSONRenderer().render({"success": False, "message": "Недостаточно новогоднего настроения! Общайся в чате что бы получить больше!"}))
 
-    await connect.request("UPDATE users SET exp = ? WHERE user_id = ?", (user_data[2] - toy_data[2], user_id))
+    user_data.exp = user_data.exp - toy_data.exp
+    await user_data.asave()
+    toy = await api.models.Toys.objects.filter(owner=user_data, slot=slot).afirst()
+    if toy is not None:
+        toy.toy = toy_data
+        await toy.asave()
+        return Response(JSONRenderer().render({"success": True, 'message': "Игрушка успешно куплена!", "exp": user_data.exp - toy_data.exp}))
 
-    if await (await connect.request("SELECT id FROM toys WHERE owner = ? AND slot = ?", (user_id, slot))).fetchone():
-        await connect.request("UPDATE toys SET toy = ? WHERE owner = ? AND slot = ?", (toy_id, user_id, slot))
-        return Response(JSONRenderer().render({"success": True, 'message': "Игрушка успешно куплена!", "exp": user_data[2] - toy_data[2]}))
-
-    await connect.request("INSERT INTO toys VALUES (?, ?, ?, ?)", (None, user_id, toy_id, slot))
-    return Response(JSONRenderer().render({"success": True, 'message': "Игрушка успешно куплена!", "exp": user_data[2] - toy_data[2]}))
+    await api.models.Toys.objects.acreate(owner=user_data, slot=slot, toy=toy_data)
+    return Response(JSONRenderer().render({"success": True, 'message': "Игрушка успешно куплена!", "exp": user_data.exp - toy_data.exp}))
 
 
 @decorators.api_view(['GET'])
 async def get_user_toys(request: Request):
 
     user_id = request.query_params.get('user_id')
-    data = await (await connect.request("SELECT * FROM toys WHERE owner = ?", (user_id, ))).fetchall()
+    queryset = api.models.Toys.objects.filter(owner=user_id)
+    return Response(JSONRenderer().render({'items': list(queryset)}))
 
-    return Response(JSONRenderer().render({'items': data}))
+
+@decorators.api_view(['PUT'])
+async def update_exp(request: Request):
+    """
+    Обновляет количество опыта (новогоднего настроения) для указанного пользователя.
+
+    Этот эндпоинт используется телеграм-ботом для изменения значения опыта пользователя.
+
+    Args:
+        request (Request): HTTP запрос, который должен содержать:
+            - exp (int): Новое значение опыта пользователя
+            - user_id (int): Идентификатор пользователя
+
+    Returns:
+        Response: HTTP ответ со статусом 200 в случае успешного обновления
+
+    Examples:
+        PUT /api/update_exp/
+        Request body:
+        {
+            "exp": 100,
+            "user_id": 1
+        }
+
+    Note:
+        - Требуется реализация аутентификации для бота
+        - Метод является асинхронным
+
+    Raises:
+        User.DoesNotExist: Если пользователь с указанным user_id не найден
+     # TODO: add auth for bot
+
+    """
+
+    exp = request.data.get('exp')
+    user_id = request.data.get('user_id')
+
+    user_data = await api.models.User.objects.aget(id=user_id)
+    user_data.exp = user_data.exp + exp
+    await user_data.asave()
+
+    return Response(200)
+
+
+@decorators.api_view(['POST'])
+async def on_start_command(request: Request):
+    user_id = request.data.get('user_id')
+    username = request.data.get('username')
+
+    user = await api.models.User.objects.filter(user_id=user_id).afirst()
+
+    if user is None:
+        user = await api.models.User.objects.acreate(user_id=user_id, username=username, exp=0, uuid=uuid.uuid4())
+
+    return Response(JSONRenderer().render({"uuid": user.uuid}))

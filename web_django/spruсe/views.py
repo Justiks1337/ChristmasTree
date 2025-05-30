@@ -1,8 +1,8 @@
-from django.shortcuts import render
-from django.http.response import HttpResponse
 from django.http.request import HttpRequest
+from django.http.response import HttpResponse
+from django.shortcuts import render
 
-from database.Connection import connect
+from api.models import User
 
 
 async def index(request: HttpRequest):
@@ -13,8 +13,6 @@ async def index(request: HttpRequest):
     if not user_id or not uuid_:
         return HttpResponse('<h4>404! На ёлку можно входить только через бота!</h4>')
 
-    exp = (await (await connect.request("SELECT exp FROM users WHERE user_id = ?", (user_id, ))).fetchone())[0]
+    user = await User.objects.aget(user_id=user_id)
 
-    return render(request, 'spruce/index.html', {'exp': exp, 'user_id': user_id})
-
-
+    return render(request, 'spruce/index.html', {'exp': user.exp, 'user_id': user_id})
