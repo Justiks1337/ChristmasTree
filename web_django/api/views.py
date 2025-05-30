@@ -1,12 +1,39 @@
 import uuid
+from functools import wraps
 
 from asgiref.sync import sync_to_async
 from adrf import decorators
 from rest_framework.renderers import JSONRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework import status
+from new_year.settings import SECRET_KEY
 
 import api.models
+
+
+def bot_auth_required(view_func):
+    """Декоратор для проверки авторизации телеграм-бота"""
+    @wraps(view_func)
+    async def wrapper(request, *args, **kwargs):
+        # Проверка токена из заголовка Authorization
+        auth_header = request.META.get('HTTP_AUTHORIZATION')
+
+        if not auth_header or not auth_header.startswith('Bot '):
+            return Response(
+                {"error": "Требуется авторизация бота"}, 
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        token = auth_header.split(' ')[1]
+        if token != SECRET_KEY:
+            return Response(
+                {"error": "Неверный токен авторизации"}, 
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        return await view_func(request, *args, **kwargs)
+    return wrapper
 
 
 @decorators.api_view(['POST'])
@@ -43,6 +70,7 @@ def get_user_toys(request: Request):
 
 
 @decorators.api_view(['PUT'])
+@bot_auth_required
 async def update_exp(request: Request):
     """
     Обновляет количество опыта (новогоднего настроения) для указанного пользователя.
@@ -65,14 +93,15 @@ async def update_exp(request: Request):
             "user_id": 1
         }
 
+        Headers:
+        Authorization: Bot <ваш_секретный_токен>
+
     Note:
-        - Требуется реализация аутентификации для бота
+        - Для доступа требуется токен авторизации бота в заголовке
         - Метод является асинхронным
 
     Raises:
         User.DoesNotExist: Если пользователь с указанным user_id не найден
-     # TODO: add auth for bot
-
     """
 
     exp = request.data.get('exp')
@@ -86,6 +115,7 @@ async def update_exp(request: Request):
 
 
 @decorators.api_view(['POST'])
+@bot_auth_required
 async def on_start_command(request: Request):
     user_id = request.data.get('user_id')
     username = request.data.get('username')

@@ -46,7 +46,9 @@ async def database_manipulation(user: aiogram.types.User):
     }
 
     async with ClientSession() as session:
-        async with session.post(f"{PROTOCOL}{HOST}/api/v1/on_start_command/", json=payload) as response:
+        async with session.post(f"{PROTOCOL}{HOST}/api/v1/on_start_command/",
+                                json=payload,
+                                headers={"Authorization": "Bot " + Config.web_auth}) as response:
             result = json.loads(await response.json())
             return result["uuid"]
 
@@ -63,7 +65,11 @@ async def main_handler(message: aiogram.types.Message):
         }
 
         async with ClientSession() as session:
-            async with session.put(f"{PROTOCOL}{HOST}/api/v1/update_exp/", json=payload):
+            async with session.put(
+                    f"{PROTOCOL}{HOST}/api/v1/update_exp/",
+                    json=payload,
+                    headers={"Authorization": "Bot " + Config.web_auth}
+            ):
                 pass
 
 

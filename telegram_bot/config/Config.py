@@ -9,6 +9,7 @@ class Config:
     __config_file.read(os.path.join(os.path.dirname(__file__), 'config.ini'), encoding='utf-8-sig')
 
     bot_token = __config_file.get('Telegram', 'bot_token')
+    web_auth = __config_file.get('Telegram', 'web_auth')
 
     db_name = __config_file.get('Database', 'db_name')
     transactions_to_backup = int(__config_file.get('Database', 'transactions_to_backup'))
